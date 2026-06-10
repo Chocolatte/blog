@@ -161,6 +161,14 @@ def markdown_to_html(text):
     return "\n".join(out)
 
 
+def post_content_html(title, date, body):
+    return (
+        f"<article>\n<h2>{html_lib.escape(title, quote=False)}</h2>\n"
+        f'<p class="date">{html_lib.escape(date, quote=False)}</p>\n'
+        f"{markdown_to_html(body)}\n</article>"
+    )
+
+
 def parse_post(path):
     with open(path, encoding="utf-8") as f:
         text = f.read()
@@ -198,11 +206,7 @@ def build():
         title = meta.get("title", slug)
         date = meta.get("date", "")
 
-        content_html = (
-            f"<article>\n<h2>{html_lib.escape(title, quote=False)}</h2>\n"
-            f'<p class="date">{html_lib.escape(date, quote=False)}</p>\n'
-            f"{markdown_to_html(body)}\n</article>"
-        )
+        content_html = post_content_html(title, date, body)
         page = render_page(title, content_html, root="../")
 
         with open(os.path.join(OUTPUT_DIR, "posts", f"{slug}.html"), "w", encoding="utf-8") as f:
