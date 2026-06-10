@@ -17,19 +17,28 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  var stored = localStorage.getItem("theme");
+  var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+</script>
 <title>{{TITLE}} - {{SITE_TITLE}}</title>
 <link rel="stylesheet" href="{{ROOT}}static/style.css">
 </head>
 <body>
-<header>
-<h1><a href="{{ROOT}}index.html">{{SITE_TITLE}}</a></h1>
-</header>
+<div class="terminal">
+<div class="terminal-title"><a href="{{ROOT}}index.html">{{SITE_TITLE}}</a></div>
 <main>
 {{CONTENT}}
 </main>
 <footer>
-<p>&copy; {{YEAR}} {{SITE_TITLE}}</p>
+<span>&copy; {{YEAR}} {{SITE_TITLE}}</span>
+<button id="theme-toggle" aria-label="Toggle dark mode">Dark mode</button>
 </footer>
+</div>
+<script src="{{ROOT}}static/theme.js" defer></script>
 </body>
 </html>
 """
